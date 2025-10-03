@@ -1,0 +1,46 @@
+{
+  "name": "staffany-assignment-starter-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "NODE_ENV=production node ./dist/src/index.js",
+    "dev": "NODE_ENV=development nodemon",
+    "test": "jest",
+    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrate:create": "ts-node ./node_modules/typeorm/cli.js migration:create",
+    "migrate:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/inert": "^6.0.4",
+    "@hapi/vision": "^6.1.0",
+    "date-fns": "^2.28.0",
+    "dotenv": "^8.6.0",
+    "hapi-cors": "^1.0.3",
+    "hapi-swagger": "^14.2.4",
+    "joi": "^17.13.3",
+    "pg": "^8.7.1",
+    "qs": "^6.10.2",
+    "typeorm": "^0.3.20",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/hapi": "^18.0.7",
+    "@types/hapi__hapi": "^20.0.10",
+    "@types/joi": "^14.3.4",
+    "@types/node": "^14.18.5",
+    "@types/qs": "^6.9.7",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  }
+}

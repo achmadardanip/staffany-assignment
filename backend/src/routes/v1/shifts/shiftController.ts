@@ -7,14 +7,17 @@ import {
   IUpdateShift,
 } from "../../../shared/interfaces";
 import moduleLogger from "../../../shared/functions/logger";
+import { format } from "date-fns";
 
 const logger = moduleLogger("shiftController");
 
 export const find = async (req: Request, h: ResponseToolkit) => {
   logger.info("Find shifts");
   try {
-    const filter = req.query;
-    const data = await shiftUsecase.find(filter);
+    const { weekStart } = req.query as { weekStart?: string | Date };
+    const normalizedWeekStart =
+      weekStart instanceof Date ? format(weekStart, "yyyy-MM-dd") : weekStart;
+    const data = await shiftUsecase.find({ weekStart: normalizedWeekStart });
     const res: ISuccessResponse = {
       statusCode: 200,
       message: "Get shift successful",
@@ -22,7 +25,7 @@ export const find = async (req: Request, h: ResponseToolkit) => {
     };
     return res;
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
     return errorHandler(h, error);
   }
 };
@@ -31,7 +34,7 @@ export const findById = async (req: Request, h: ResponseToolkit) => {
   logger.info("Find shift by id");
   try {
     const id = req.params.id;
-    const data = await shiftUsecase.findById(id);
+    const data = await shiftUsecase.findById(id, { relations: ["week"] });
     const res: ISuccessResponse = {
       statusCode: 200,
       message: "Get shift successful",
@@ -39,7 +42,7 @@ export const findById = async (req: Request, h: ResponseToolkit) => {
     };
     return res;
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
     return errorHandler(h, error);
   }
 };
@@ -56,7 +59,7 @@ export const create = async (req: Request, h: ResponseToolkit) => {
     };
     return res;
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
     return errorHandler(h, error);
   }
 };
@@ -75,7 +78,7 @@ export const updateById = async (req: Request, h: ResponseToolkit) => {
     };
     return res;
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
     return errorHandler(h, error);
   }
 };
@@ -92,7 +95,26 @@ export const deleteById = async (req: Request, h: ResponseToolkit) => {
     };
     return res;
   } catch (error) {
-    logger.error(error.message)
+    logger.error(error.message);
+    return errorHandler(h, error);
+  }
+};
+
+export const publishWeek = async (req: Request, h: ResponseToolkit) => {
+  logger.info("Publish shifts week");
+  try {
+    const { weekStart } = req.payload as { weekStart: string | Date };
+    const normalizedWeekStart =
+      weekStart instanceof Date ? format(weekStart, "yyyy-MM-dd") : weekStart;
+    const data = await shiftUsecase.publishWeek(normalizedWeekStart as string);
+    const res: ISuccessResponse = {
+      statusCode: 200,
+      message: "Publish shifts successful",
+      results: data,
+    };
+    return res;
+  } catch (error) {
+    logger.error(error.message);
     return errorHandler(h, error);
   }
 };

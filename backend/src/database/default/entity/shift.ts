@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseTimestamp } from "./baseTimestamp";
+import Week from "./week";
 
 @Entity()
 export default class Shift extends BaseTimestamp {
@@ -23,4 +24,13 @@ export default class Shift extends BaseTimestamp {
     type: "time",
   })
   endTime: string;
+
+  @ManyToOne(() => Week, (week) => week.shifts, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "weekId" })
+  week: Week;
+
+  @Column({ type: "uuid" })
+  weekId: string;
 }

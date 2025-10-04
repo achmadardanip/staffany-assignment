@@ -21,27 +21,27 @@ export const find = async (opts?: FindManyOptions<Shift>): Promise<Shift[]> => {
 export const findById = async (
   id: string,
   opts?: FindOneOptions<Shift>
-): Promise<Shift> => {
+): Promise<Shift | undefined> => {
   logger.info("Find by id");
   const repository = getRepository(Shift);
   const data = await repository.findOne({
     where: { id },
     ...opts,
   });
-  return data;
+  return data ?? undefined;
 };
 
 export const findOne = async (
   where?: FindOptionsWhere<Shift>,
   opts?: FindOneOptions<Shift>
-): Promise<Shift> => {
+): Promise<Shift | undefined> => {
   logger.info("Find one");
   const repository = getRepository(Shift);
   const data = await repository.findOne({
     where,
     ...opts,
   });
-  return data;
+  return data ?? undefined;
 };
 
 export const create = async (payload: Shift): Promise<Shift> => {
@@ -58,7 +58,8 @@ export const updateById = async (
   logger.info("Update by id");
   const repository = getRepository(Shift);
   await repository.update(id, payload);
-  return findById(id);
+  const updated = await findById(id);
+  return updated as Shift;
 };
 
 export const deleteById = async (
